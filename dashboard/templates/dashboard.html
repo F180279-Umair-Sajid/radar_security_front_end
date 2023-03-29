@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+        }
+
+        th {
+            background-color: #555;
+            color: #fff;
+        }
+
+        th.bg-secondary {
+            background-color: #343a40;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">NIDS List</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover bg-white">
+                    <thead>
+                    <tr>
+                        <th class="bg-secondary text-white">Flow ID</th>
+                        <th class="bg-secondary text-white">Protocol</th>
+                        <th class="bg-secondary text-white">Timestamp</th>
+                        <th class="bg-secondary text-white">Flow Duration</th>
+                        <th class="bg-secondary text-white">Total Forward Packets</th>
+                        <th class="bg-secondary text-white">Total Backward Packets</th>
+                        <th class="bg-secondary text-white">Total Forward Packet Size</th>
+                        <th class="bg-secondary text-white">Total Backward Packet Size</th>
+                        <th class="bg-secondary text-white">Total Forward Payload Size</th>
+                        <th class="bg-secondary text-white">Total Backward Payload Size</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for nid in nids %}
+                        <tr>
+                            <td>{{ nid.flow_id }}</td>
+                            <td>{{ nid.protocol }}</td>
+                            <td>{{ nid.timestamp }}</td>
+                            <td>{{ nid.flow_duration }}</td>
+                            <td>{{ nid.total_fwd_packets }}</td>
+                            <td>{{ nid.total_bwd_packets }}</td>
+                            <td>{{ nid.total_fwd_packet_size }}</td>
+                            <td>{{ nid.total_bwd_packet_size }}</td>
+                            <td>{{ nid.total_fwd_payload_size }}</td>
+                            <td>{{ niad.total_bwd_payload_size }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

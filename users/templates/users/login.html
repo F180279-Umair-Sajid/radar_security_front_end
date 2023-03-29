@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card bg-transparent border-light fadeIn"
+                     style="border-radius: 20px; box-shadow: 0px 0px 10px 2px rgba(19,3,250,0.25);">
+                    <div class="card-header text-center"
+                         style="background-color: transparent; border-radius: 20px 20px 0 0; border-bottom: none;">
+                        <h3 class="card-title"
+                            style="color: #fff; font-weight: bold; text-transform: uppercase; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 2.5rem;">
+                            Login</h3>
+                    </div>
+                    <div class="card-body bg-light" style="border-radius: 0 0 20px 20px; padding: 30px;">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <p>{{ field }}: {{ error }}</p>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-primary btn-block mt-4 animated pulse"
+                                    style="border-radius: 20px; background-color: #4B9E84; border-color: #4B9E84; font-weight: bold; letter-spacing: 2px;"
+                                    id="login-button">
+                                Login
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_styles %}
+    <style>
+        /* Set background color and text color for the body */
+        body {
+            background-color: #222222;
+            color: #f5f5f5;
+        }
+
+        /* Animation for the card */
+        .fadeIn {
+            opacity: 0;
+            animation: fadeInAnimation 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation for the login button */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Additional styling for the form */
+        .form-control:focus {
+            border-color: #4B9E84;
+            box-shadow: 0 0 0 0.2rem rgba(75, 158, 132, 0.25);
+        }
+    </style>
+{% endblock %}
