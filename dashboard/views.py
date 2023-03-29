@@ -1,6 +1,5 @@
-from django.shortcuts import render
+# views.py
 
-# Create your views here.
 from django.shortcuts import render
 from dashboard.models import Nids
 
