@@ -16,9 +16,9 @@
 
     <style>
         /* Set a minimum height for the main content section */
-        main {
-            min-height: calc(100vh - 150px); /* Adjust as needed */
-        }
+        {#main {#}
+        {#    min-height: calc(100vh - 150px); /* Adjust as needed */#}
+        {#}#}
 
         /* Set a margin for the main content section */
         main.container {
@@ -54,6 +54,27 @@
             color: #e74c3c;
             font-size: 20px;
         }
+
+        /* Add padding to the navbar links */
+        .navbar-nav a {
+            padding: 0 15px;
+        }
+
+        /* Add hover effect to the navbar links */
+        .navbar-nav a:hover {
+            color: #f5f5f5;
+        }
+
+        /* Add a divider between the navbar links */
+        .navbar-nav .nav-item:not(:last-child) {
+            border-right: 1px solid #555;
+        }
+
+        /* Add margin to the top and bottom of the container */
+        .container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +89,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Notifications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -77,8 +110,6 @@
 <main class="container">
     {% block content %}{% endblock %}
 </main>
-
-<!-- Footer -->
 <footer class="bg-dark text-white py-3">
     <div class="container">
         <div class="row">
@@ -91,8 +122,6 @@
         </div>
     </div>
 </footer>
-
-<!-- Bootstrap JS and additional scripts -->
 {% bootstrap_javascript %}
 {% block additional_scripts %}{% endblock %}
 

@@ -32,9 +32,13 @@ class TypingStats(models.Model):
     active_apps_average = models.FloatField()
     current_app = models.CharField(max_length=255)
     penultimate_app = models.CharField(max_length=255)
-    current_app_foreground_time = models.FloatField()
+    current_app_foreground_time = models.IntegerField()
     current_app_average_processes = models.FloatField()
     current_app_stddev_processes = models.FloatField()
+    cpu_percent = models.IntegerField(default=0)
+    ram_percent = models.IntegerField(default=0)
+    bytes_sent = models.IntegerField(default=0)
+    bytes_received = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'typing_stats'
