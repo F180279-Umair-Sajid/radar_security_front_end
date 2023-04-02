@@ -4,8 +4,8 @@ from dashboard.models import typing_stats, nids
 from django.db.models import Count, F, Window, Subquery, OuterRef
 from django.db import models
 from django.http import JsonResponse
-from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 def fetch_cpu_data(request):
@@ -50,9 +50,11 @@ def fetch_ram_data(request):
     return JsonResponse(chart_data)
 
 
+@login_required
 def dashboard(request):
     # Retrieve data from the database for TypingStats model
-    typing_data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
+    typing_data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[
+                  :10]
 
     # Transform the data into the format expected by Chart.js for TypingStats model
     typing_labels = []
@@ -77,7 +79,9 @@ def fetch_data(request):
     labels = []
     values = []
     for row in data:
-        labels.append(str(row['timestamp']))
+        timestamp = int(row['timestamp'].timestamp())
+        label = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+        labels.append(label)
         values.append(row['flow_duration'])
 
     # Create a dictionary containing the labels and values

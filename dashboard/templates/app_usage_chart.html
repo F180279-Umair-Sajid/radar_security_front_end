@@ -1,0 +1,9 @@
+{% load static %}
+
+<div class="chart-container">
+    <h1>App Usage</h1>
+    <canvas id="appUsageChart" data-url="{% url 'fetch_app_data' %}"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="{% static 'js/app_usage_chart.js' %}"></script>

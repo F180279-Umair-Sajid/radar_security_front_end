@@ -1,0 +1,9 @@
+{% load static %}
+
+<div class="chart-container">
+    <h1>Network Traffic</h1>
+    <canvas id="lineChart" data-url="{% url 'fetch_data' %}"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="{% static 'js/network_traffic_chart.js' %}"></script>
