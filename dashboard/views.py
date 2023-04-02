@@ -83,7 +83,6 @@ def fetch_data(request):
         label = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
         labels.append(label)
         values.append(row['flow_duration'])
-
     # Create a dictionary containing the labels and values
     chart_data = {
         'labels': labels,

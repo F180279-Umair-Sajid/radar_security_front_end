@@ -1,35 +1,167 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+    Dashboard
+{% endblock %}
 
 {% block content %}
-    <div class="container">
-    <div class="row">
-                <div class="row">
-            <div class="col-md-6">
-                {% include 'network_traffic_chart.html' %}
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded">
+                    <div class="card-header bg-primary text-white rounded-top">
+                        Network Traffic Chart
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            {% include 'network_traffic_chart.html' %}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                {% include 'keyboard_usage_chart.html' %}
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded">
+                    <div class="card-header bg-danger text-white rounded-top">
+                        Keyboard Usage Chart
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            {% include 'keyboard_usage_chart.html' %}
+                        </div>
+                    </div>
+                </div>
             </div>
-                    <div class="col-md-6">
-                {% include 'app_usage_chart.html' %}
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded">
+                    <div class="card-header bg-success text-white rounded-top">
+                        App Usage Chart
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            {% include 'app_usage_chart.html' %}
+                        </div>
+                    </div>
+                </div>
             </div>
-                    <div class="col-md-6">
-                {% include 'ram_cpu_usage_chart.html' %}
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded">
+                    <div class="card-header bg-info text-white rounded-top">
+                        RAM and CPU Usage Chart
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            {% include 'ram_cpu_usage_chart.html' %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-
-
     </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="{% static 'js/ram_cpu_usage_chart.js' %}"></script>
     <script src="{% static 'js/network_traffic_chart.js' %}"></script>
     <script src="{% static 'js/app_usage_chart.js' %}"></script>
     <script src="{% static 'js/keyboard_usage_chart.js' %}"></script>
-{% endblock %}
+    <style>
+        /* Card styles */
+        .card {
+            background-color: #F2F2F2;
+
+        }
+
+        .card-header {
+            border-radius: 20px 20px 0 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Chart styles */
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Color palette */
+        :root {
+            --primary: #2777B4;
+            --secondary: #F4A261;
+            --success: #6ECB63;
+            --danger: #EF476F;
+            --warning: #FFD166;
+            --info: #118AB2;
+            --light: #F8F9FA;
+            --dark: #343A40;
+        }
+
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+
+        .bg-secondary {
+            background-color: var(--secondary) !important;
+        }
+
+        .bg-success {
+            background-color: var(--success) !important;
+        }
+
+        .bg-danger {
+            background-color: var(--danger) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .bg-info {
+            background-color: var(--info) !important;
+        }
+
+        .bg-light {
+            background-color: var(--light) !important;
+        }
+
+        .bg-dark {
+            background-color: var(--dark) !important;
+        }
+
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        .text-secondary {
+            color: var(--secondary) !important;
+        }
+
+        .text-success {
+            color: var(--success) !important;
+        }
+
+        .text-danger {
+            color: var(--danger) !important;
+        }
+
+        .text-warning {
+            color: var(--warning) !important;
+        }
+
+        .text-info {
+            color: var(--info) !important;
+        }
+
+        .text-light {
+            color: var(--light) !important;
+        }
+
+        .text-dark {
+            color: var(--dark) !important;
+        }
+    </style>
+
+{% endblock content %}
