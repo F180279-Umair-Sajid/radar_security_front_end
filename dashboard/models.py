@@ -1,23 +1,45 @@
 from django.db import models
 
+#
+"id SERIAL PRIMARY KEY",
+"timestamp TIMESTAMP DEFAULT NOW()",
+"flow_id VARCHAR(50)",
+"sender_ip VARCHAR(15)",
+"protocol VARCHAR(5)",
+"flow_duration FLOAT",
+"flow_iat_mean FLOAT",
+"fwd_iat_tot FLOAT",
+"bwd_bytes_per_avg FLOAT",
+"bwd_pkts_per_avg FLOAT",
+"bwd_blk_rate_avg FLOAT",
+"subflow_fwd_pkts INT",
+"subflow_fwd_bytes INT",
+"fwd_act_data_pkts INT",
+"fwd_seg_size_min INT"
 
-class Nids(models.Model):
-    flow_id = models.IntegerField(primary_key=True)
-    protocol = models.CharField(max_length=10)
-    timestamp = models.DateTimeField()
+
+#
+class nids(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    flow_id = models.CharField(max_length=50)
+    sender_ip = models.CharField(max_length=15)
+    protocol = models.CharField(max_length=5)
     flow_duration = models.FloatField()
-    total_fwd_packets = models.IntegerField()
-    total_bwd_packets = models.IntegerField()
-    total_fwd_packet_size = models.IntegerField()
-    total_bwd_packet_size = models.IntegerField()
-    total_fwd_payload_size = models.IntegerField()
-    total_bwd_payload_size = models.IntegerField()
+    flow_iat_mean = models.FloatField()
+    fwd_iat_tot = models.FloatField()
+    bwd_bytes_per_avg = models.FloatField()
+    bwd_pkts_per_avg = models.FloatField()
+    bwd_blk_rate_avg = models.FloatField()
+    subflow_fwd_pkts = models.IntegerField()
+    subflow_fwd_bytes = models.IntegerField()
+    fwd_act_data_pkts = models.IntegerField()
+    fwd_seg_size_min = models.IntegerField()
 
     class Meta:
         db_table = 'nids'
 
 
-class TypingStats(models.Model):
+class typing_stats(models.Model):
     timestamp = models.DateTimeField()
     keystroke_counter = models.IntegerField()
     erase_keys_counter = models.IntegerField()

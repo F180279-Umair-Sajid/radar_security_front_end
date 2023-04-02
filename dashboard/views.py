@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from dashboard.models import TypingStats, Nids
+from dashboard.models import typing_stats, nids
 from django.db.models import Count, F, Window, Subquery, OuterRef
 from django.db import models
 from django.http import JsonResponse
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 
 
 def fetch_cpu_data(request):
     # Retrieve data from the database for TypingStats model
-    data = TypingStats.objects.order_by('-timestamp').values('timestamp', 'cpu_percent')[:10]
+    data = typing_stats.objects.order_by('-timestamp').values('timestamp', 'cpu_percent')[:10]
 
     # Transform the data into the format expected by Chart.js
     labels = []
@@ -30,7 +31,7 @@ def fetch_cpu_data(request):
 
 def fetch_ram_data(request):
     # Retrieve data from the database for TypingStats model
-    data = TypingStats.objects.order_by('-timestamp').values('timestamp', 'ram_percent')[:10]
+    data = typing_stats.objects.order_by('-timestamp').values('timestamp', 'ram_percent')[:10]
 
     # Transform the data into the format expected by Chart.js
     labels = []
@@ -51,7 +52,7 @@ def fetch_ram_data(request):
 
 def dashboard(request):
     # Retrieve data from the database for TypingStats model
-    typing_data = TypingStats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
+    typing_data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
 
     # Transform the data into the format expected by Chart.js for TypingStats model
     typing_labels = []
@@ -70,14 +71,14 @@ def dashboard(request):
 
 def fetch_data(request):
     # Retrieve data from the database
-    data = Nids.objects.values('timestamp', 'total_fwd_packet_size')
+    data = nids.objects.values('timestamp', 'flow_duration')
 
     # Transform the data into the format expected by Chart.js
     labels = []
     values = []
     for row in data:
         labels.append(str(row['timestamp']))
-        values.append(row['total_fwd_packet_size'])
+        values.append(row['flow_duration'])
 
     # Create a dictionary containing the labels and values
     chart_data = {
@@ -91,7 +92,7 @@ def fetch_data(request):
 
 def fetch_app_data(request):
     # Retrieve data from the database for TypingStats model
-    data = TypingStats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
+    data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
 
     # Transform the data into the format expected by Chart.js
     labels = []
@@ -112,11 +113,11 @@ def fetch_app_data(request):
 
 def fetch_typing_data(request):
     # Retrieve data from the database for TypingStats model
-    previous_keystroke = TypingStats.objects.filter(
+    previous_keystroke = typing_stats.objects.filter(
         timestamp__lt=OuterRef('timestamp')
     ).order_by('timestamp').values('keystroke_counter')[:1]
 
-    data = TypingStats.objects.annotate(
+    data = typing_stats.objects.annotate(
         keystroke_diff=F('keystroke_counter') - Subquery(previous_keystroke, output_field=models.IntegerField())
     ).values('timestamp', 'keystroke_diff')
 
