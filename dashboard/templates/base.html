@@ -1,10 +1,22 @@
 {% load static %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Radar Dashboard{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <script src="{% static 'js/logout.js' %}"></script>
+
     <style>
         /* Global styles */
         body {
@@ -197,12 +209,15 @@
         <ul>
             <li><a href="#">Network Intrusion</a></li>
             <li><a href="#">HostBased Intrusion</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+
         </ul>
     </nav>
 </header>
 <main>
     {% block content %}{% endblock %}
 </main>
+<script src="{% static 'js/logout.js' %}"></script>
+
 </body>
 </html>

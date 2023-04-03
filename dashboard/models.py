@@ -20,20 +20,22 @@ from django.db import models
 
 #
 class nids(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
+    id = models.AutoField(primary_key=True)
     flow_id = models.CharField(max_length=50)
-    sender_ip = models.CharField(max_length=15)
-    protocol = models.CharField(max_length=5)
+    timestamp = models.DateTimeField(auto_now_add=True)
     flow_duration = models.FloatField()
     flow_iat_mean = models.FloatField()
     fwd_iat_tot = models.FloatField()
-    bwd_bytes_per_avg = models.FloatField()
-    bwd_pkts_per_avg = models.FloatField()
-    bwd_blk_rate_avg = models.FloatField()
     subflow_fwd_pkts = models.IntegerField()
     subflow_fwd_bytes = models.IntegerField()
     fwd_act_data_pkts = models.IntegerField()
     fwd_seg_size_min = models.IntegerField()
+    bwd_pkts_count = models.IntegerField()
+    bwd_bytes_per_avg = models.FloatField()
+    bwd_payload_count = models.IntegerField()
+    bwd_payload_bytes_per_avg = models.FloatField()
+    bwd_blk_rate_avg = models.FloatField()
+    bwd_pkts_per_avg = models.FloatField()
 
     class Meta:
         db_table = 'nids'

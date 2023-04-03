@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.urls import reverse
+
 from dashboard.models import typing_stats, nids
 from django.db.models import Count, F, Window, Subquery, OuterRef
 from django.db import models
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 
 def fetch_cpu_data(request):
@@ -139,3 +143,27 @@ def fetch_typing_data(request):
 
     # Return the data as a JSON response
     return JsonResponse(chart_data)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('login'))  #
+
+
+def nids_logs(request):
+    return render(request, 'nids_logs.html')
+
+
+def fetch_nids_data(request):
+    nids_data = nids.objects.values(
+        'timestamp', 'flow_id', 'flow_duration', 'flow_iat_mean', 'fwd_iat_tot',
+        'subflow_fwd_pkts', 'subflow_fwd_bytes', 'fwd_act_data_pkts', 'fwd_seg_size_min',
+        'bwd_pkts_count', 'bwd_bytes_per_avg', 'bwd_payload_count', 'bwd_payload_bytes_per_avg',
+        'bwd_blk_rate_avg', 'bwd_pkts_per_avg'
+    ).order_by('-timestamp')[:100]
+
+    data = list(nids_data)
+    for item in data:
+        item['timestamp'] = item['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
+
+    return JsonResponse({'data': data})
