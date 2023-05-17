@@ -1,0 +1,23 @@
+/* main.css */
+
+/* Global styles */
+body {
+    background-color: #F7F7F7;
+    font-family: Arial, sans-serif;
+    color: #4E4E4E;
+    line-height: 1.5;
+}
+
+header {
+    background: rgb(0, 19, 36);
+    background: linear-gradient(294deg, rgba(0, 19, 36, 1) 1%, rgba(11, 11, 11, 1) 100%, rgba(0, 255, 224, 1) 100%);
+    padding: 20px;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 20px 20px;
+    position: relative;
+}
+
+/* ...rest of your css styles... */

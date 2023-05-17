@@ -11,6 +11,34 @@ from datetime import datetime
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+from .models import Alert
+from django.shortcuts import render
+from .models import IpMalicious
+
+
+def ip_malicious_view(request):
+    ip_malicious_entries = IpMalicious.objects.all()
+    return render(request, 'notification.html', {'ip_malicious_entries': ip_malicious_entries})
+
+
+def alert_view(request):
+    # Retrieve distinct IP addresses from the Alert model
+    distinct_ips = Alert.objects.values('src_ip').distinct()
+
+    # Fetch the entries with unique IP addresses
+    unique_alerts = []
+    for ip in distinct_ips:
+        alert = Alert.objects.filter(src_ip=ip['src_ip']).last()
+        if alert:
+            unique_alerts.append(alert)
+
+    # Pass the unique alerts to the HTML template
+    context = {
+        'alerts': unique_alerts
+    }
+
+    return render(request, 'alert.html', context)
+
 
 def fetch_cpu_data(request):
     # Retrieve data from the database for TypingStats model

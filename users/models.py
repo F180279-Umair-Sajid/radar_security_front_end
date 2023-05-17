@@ -1,5 +1,6 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
@@ -25,8 +26,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class CustomUser(AbstractBaseUser):
-    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(verbose_name=_('email address'), max_length=255, unique=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
@@ -40,11 +41,24 @@ class CustomUser(AbstractBaseUser):
 
     objects = CustomUserManager()
 
+    # Add your extra privileges as ManyToManyField
+    privileges = models.ManyToManyField('YourPermissionModel', blank=True)
+
     def __str__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        return True
+        # Override the has_perm method to handle custom permissions
+        return self.is_active and self.is_superuser
 
     def has_module_perms(self, app_label):
-        return True
+        # Override the has_module_perms method to handle custom permissions
+        return self.is_active and self.is_superuser
+
+
+class YourPermissionModel(models.Model):
+    # Define your custom permission model fields
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name

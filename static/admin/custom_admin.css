@@ -1,0 +1,12 @@
+/* Example custom styles */
+body {
+    background-color: #f5f5f5;
+}
+
+#site-name {
+    font-family: "Arial", sans-serif;
+    font-size: 24px;
+    color: #008000;
+}
+
+/* Add more custom styles as needed */

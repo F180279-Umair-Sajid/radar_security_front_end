@@ -17,7 +17,6 @@ from django.db import models
 "fwd_act_data_pkts INT",
 "fwd_seg_size_min INT"
 
-
 #
 class nids(models.Model):
     id = models.AutoField(primary_key=True)
@@ -66,3 +65,26 @@ class typing_stats(models.Model):
 
     class Meta:
         db_table = 'typing_stats'
+
+
+class Alert(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    src_ip = models.GenericIPAddressField()
+    dst_ip = models.GenericIPAddressField()
+    src_port = models.PositiveIntegerField()
+    dst_port = models.PositiveIntegerField()
+
+    class Meta:
+        db_table = 'alerts'
+
+
+class IpMalicious(models.Model):
+    ip_address = models.GenericIPAddressField(primary_key=True)
+    is_malicious = models.BooleanField(default=False)
+    country = models.CharField(max_length=255)
+    country_code = models.CharField(max_length=5)
+
+    class Meta:
+        db_table = 'ip_malicious'
