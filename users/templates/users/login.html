@@ -5,21 +5,12 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <div class="col-md-8">
-        <div class="card bg-transparent border-light">
-        </div>
-    </div>>
-    <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-        <div class="card bg-transparent border-light fadeIn"
-             style="border-radius: 20px; box-shadow: 0px 0px 10px 2px rgba(19,3,250,0.25);">
-            <div class="card-header text-center"
-                 style="background-color: transparent; border-radius: 20px 20px 0 0; border-bottom: none;">
-                <h3 class="card-title"
-                    style="color: #fff; font-weight: bold; text-transform: uppercase; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 2.5rem;">
-                    Login
-                </h3>
+    <div class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="card bg-transparent border-light mx-auto" style="border-radius: 20px; width: 400px;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="card-title text-primary mb-0">Login</h3>
             </div>
-            <div class="card-body bg-light" style="border-radius: 0 0 20px 20px; padding: 30px;">
+            <div class="card-body">
                 <form method="POST">
                     {% csrf_token %}
                     {% bootstrap_form form %}
@@ -32,12 +23,7 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-
-                    <button type="submit" class="btn btn-primary btn-block mt-4 animated pulse"
-                            style="border-radius: 20px; background-color: #4B9E84; border-color: #4B9E84; font-weight: bold; letter-spacing: 2px;"
-                            id="login-button">
-                        Login
-                    </button>
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
                 </form>
             </div>
         </div>
@@ -66,19 +52,6 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        /* Animation for the login button */
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
             }
         }
 

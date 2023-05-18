@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 from .views import alert_view, ip_malicious_view
 
@@ -10,7 +11,6 @@ urlpatterns = [
     path('fetch_ram_data/', views.fetch_ram_data, name='fetch_ram_data'),
     path('fetch_cpu_data/', views.fetch_cpu_data, name='fetch_cpu_data'),
     path('logout/', views.logout_view, name='logout'),
-    path('nids_logs/', views.nids_logs, name='nids_logs'),
     path('fetch_nids_data/', views.fetch_nids_data, name='fetch_nids_data'),
     path('alerts/', alert_view, name='alerts'),
     path('notifications/', ip_malicious_view, name='ip_malicious_view'),

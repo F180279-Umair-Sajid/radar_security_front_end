@@ -1,26 +1,27 @@
-from django.shortcuts import render
+from datetime import datetime
+
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.db.models import Count, F, Subquery, OuterRef
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 from dashboard.models import typing_stats, nids
-from django.db.models import Count, F, Window, Subquery, OuterRef
-from django.db import models
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-
 from .models import Alert
-from django.shortcuts import render
-from .models import IpMalicious
 
 
+@login_required
 def ip_malicious_view(request):
-    ip_malicious_entries = IpMalicious.objects.all()
-    return render(request, 'notification.html', {'ip_malicious_entries': ip_malicious_entries})
+    return render(request, 'notification.html')
 
 
+@login_required
 def alert_view(request):
     # Retrieve distinct IP addresses from the Alert model
     distinct_ips = Alert.objects.values('src_ip').distinct()
@@ -37,10 +38,29 @@ def alert_view(request):
         'alerts': unique_alerts
     }
 
+    # Create a SendGrid client
+    message = Mail(
+        from_email='umaiesajid@gmail.com',
+        to_emails='f180279@cfd.nu.edu.pk',
+        subject='Alerts',
+        plain_text_content=str(unique_alerts))
+    try:
+        sg = SendGridAPIClient(
+            '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')
+        response = sg.send(message)
+    except Exception as e:
+        print(str(e))
+
     return render(request, 'alert.html', context)
 
 
+@login_required
 def fetch_cpu_data(request):
+    try:
+        # Retrieve data from the database
+        data = nids.objects.values('timestamp', 'flow_duration')
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     # Retrieve data from the database for TypingStats model
     data = typing_stats.objects.order_by('-timestamp').values('timestamp', 'cpu_percent')[:10]
 
@@ -61,6 +81,7 @@ def fetch_cpu_data(request):
     return JsonResponse(chart_data)
 
 
+@login_required
 def fetch_ram_data(request):
     # Retrieve data from the database for TypingStats model
     data = typing_stats.objects.order_by('-timestamp').values('timestamp', 'ram_percent')[:10]
@@ -84,6 +105,12 @@ def fetch_ram_data(request):
 
 @login_required
 def dashboard(request):
+    try:
+        # Retrieve data from the database for TypingStats model
+        typing_data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by(
+            '-usage')[:10]
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     # Retrieve data from the database for TypingStats model
     typing_data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[
                   :10]
@@ -103,7 +130,13 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
+@login_required
 def fetch_data(request):
+    try:
+        # Retrieve data from the database
+        data = nids.objects.values('timestamp', 'flow_duration')
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     # Retrieve data from the database
     data = nids.objects.values('timestamp', 'flow_duration')
 
@@ -125,7 +158,13 @@ def fetch_data(request):
     return JsonResponse(chart_data)
 
 
+@login_required
 def fetch_app_data(request):
+    try:
+        # Retrieve data from the database for TypingStats model
+        data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     # Retrieve data from the database for TypingStats model
     data = typing_stats.objects.values('current_app').annotate(usage=Count('current_app')).order_by('-usage')[:10]
 
@@ -146,7 +185,15 @@ def fetch_app_data(request):
     return JsonResponse(chart_data)
 
 
+@login_required
 def fetch_typing_data(request):
+    try:
+        # Retrieve data from the database for TypingStats model
+        previous_keystroke = typing_stats.objects.filter(
+            timestamp__lt=OuterRef('timestamp')
+        ).order_by('timestamp').values('keystroke_counter')[:1]
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     # Retrieve data from the database for TypingStats model
     previous_keystroke = typing_stats.objects.filter(
         timestamp__lt=OuterRef('timestamp')
@@ -173,16 +220,23 @@ def fetch_typing_data(request):
     return JsonResponse(chart_data)
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect(reverse('login'))  #
 
 
-def nids_logs(request):
-    return render(request, 'nids_logs.html')
-
-
+@login_required
 def fetch_nids_data(request):
+    try:
+        nids_data = nids.objects.values(
+            'timestamp', 'flow_id', 'flow_duration', 'flow_iat_mean', 'fwd_iat_tot',
+            'subflow_fwd_pkts', 'subflow_fwd_bytes', 'fwd_act_data_pkts', 'fwd_seg_size_min',
+            'bwd_pkts_count', 'bwd_bytes_per_avg', 'bwd_payload_count', 'bwd_payload_bytes_per_avg',
+            'bwd_blk_rate_avg', 'bwd_pkts_per_avg'
+        ).order_by('-timestamp')[:100]
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
     nids_data = nids.objects.values(
         'timestamp', 'flow_id', 'flow_duration', 'flow_iat_mean', 'fwd_iat_tot',
         'subflow_fwd_pkts', 'subflow_fwd_bytes', 'fwd_act_data_pkts', 'fwd_seg_size_min',
@@ -195,3 +249,7 @@ def fetch_nids_data(request):
         item['timestamp'] = item['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
 
     return JsonResponse({'data': data})
+
+    def logout_view(request):
+        logout(request)
+        return redirect(reverse('users:user_login'))  # 'login_app:login' refers to the 'login' view in 'login_app'

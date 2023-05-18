@@ -1,4 +1,3 @@
-from typing import Dict
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
